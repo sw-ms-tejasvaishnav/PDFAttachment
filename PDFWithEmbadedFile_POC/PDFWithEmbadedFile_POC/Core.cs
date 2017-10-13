@@ -16,12 +16,73 @@ namespace PDFWithEmbadedFile_POC
 
         }
 
-        public void CreatePDFFile(string strPDFPath, string attachment, string password)
+        //public void CreatePDFFile(string strPDFPath, string attachment, string password)
+        //{
+        //    try
+        //    {
+        //        string fileName = Path.GetFileName(attachment);
+
+        //        using (Document document = new Document(cPageSize.GetDocumentWithBackroundColor(cPageSize.A4, new BaseColor(245, 245, 245)), 0f, 0f, 0f, 17f))
+        //        {
+        //            using (FileStream pdf = new FileStream(strPDFPath, FileMode.Create, FileAccess.Write, FileShare.None))
+        //            {
+        //                using (PdfWriter pdfWriter = PdfWriter.GetInstance(document, pdf))
+        //                {
+        //                    document.Open();
+
+        //                    document.Add(new Paragraph("Attached files:"));
+
+
+        //                    var fs = PdfFileSpecification.FileEmbedded(pdfWriter, attachment, fileName, null);
+
+        //                    //var rect = new Rectangle(10000f,10000f);
+        //                    Rectangle rect = new Rectangle(100, 400, 500, 800);
+        //                    rect.Border = Rectangle.BOX;
+        //                    rect.BorderWidth = 0.5f;
+        //                    rect.BorderColor  = new BaseColor(0xFF, 0x00, 0x00);
+
+        //                    fs.AddDescription(fileName, false);
+        //                    PdfAnnotation annotation = new PdfAnnotation(pdfWriter, rect);
+        //                    annotation.Put(PdfName.NAME, PdfName.ANNOT);
+        //                    annotation.Put(PdfName.SUBTYPE, PdfName.FILEATTACHMENT);
+        //                    annotation.Put(PdfName.CONTENTS, new PdfString(fileName));
+        //                    annotation.Put(PdfName.FS, fs.Reference);
+
+        //                    //PdfTemplate tmp = PdfTemplate.CreateTemplate(pdfWriter, document.PageSize.Width, 100);
+        //                    PdfAppearance ap = pdfWriter.DirectContent.CreateAppearance(rect.Width, rect.Height);
+        //                    annotation.SetAppearance(PdfAnnotation.APPEARANCE_NORMAL, ap);                          
+
+        //                    Chunk linkChunk = new Chunk(fileName);
+        //                    linkChunk.SetAnnotation(annotation);
+        //                    Phrase phrase = new Phrase();
+        //                    phrase.Add(linkChunk);
+        //                    document.Add(phrase);
+
+
+
+        //                    document.Close();
+        //                    pdfWriter.Close();
+        //                    pdfWriter.Dispose();
+
+        //                }
+        //                pdf.Close();
+        //                pdf.Dispose();
+        //            }
+        //            document.Dispose();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+
+        //    PasswordProtectPDF(strPDFPath, password);
+        //}     
+
+        public void CreatePDFFile(string strPDFPath, string[] selectedFiles, string password)
         {
             try
             {
-                string fileName = Path.GetFileName(attachment);
-
                 using (Document document = new Document(cPageSize.GetDocumentWithBackroundColor(cPageSize.A4, new BaseColor(245, 245, 245)), 0f, 0f, 0f, 17f))
                 {
                     using (FileStream pdf = new FileStream(strPDFPath, FileMode.Create, FileAccess.Write, FileShare.None))
@@ -30,45 +91,58 @@ namespace PDFWithEmbadedFile_POC
                         {
                             document.Open();
 
-                            document.Add(new Paragraph("Attached files:"));
+                            Font titleFont = FontFactory.GetFont("Verdana", 12f, Font.BOLD);
+                            Font listFont = FontFactory.GetFont("Verdana", 9f, Font.NORMAL);
 
+                            Paragraph pMain = new Paragraph();
+                            Chunk chunkTitle = new Chunk("Attached files:", titleFont);
+                            chunkTitle.SetUnderline(0.5f, -1.5f);
+                            pMain.Add(chunkTitle);
 
-                            var fs = PdfFileSpecification.FileEmbedded(pdfWriter, attachment, fileName, null);
+                            for(int i = 0; i < selectedFiles.Length; i++)
+                            {
+                                string fileName = Path.GetFileName(selectedFiles[i]);
 
-                            //var rect = new Rectangle(10000f,10000f);
-                            Rectangle rect = new Rectangle(100, 400, 500, 800);
-                            rect.Border = Rectangle.BOX;
-                            rect.BorderWidth = 0.5f;
-                            rect.BorderColor  = new BaseColor(0xFF, 0x00, 0x00);
+                                var fs = PdfFileSpecification.FileEmbedded(pdfWriter, selectedFiles[i], fileName, null);
 
-                            fs.AddDescription(fileName, false);
-                            PdfAnnotation annotation = new PdfAnnotation(pdfWriter, rect);
-                            annotation.Put(PdfName.NAME, PdfName.ANNOT);
-                            annotation.Put(PdfName.SUBTYPE, PdfName.FILEATTACHMENT);
-                            annotation.Put(PdfName.CONTENTS, new PdfString(fileName));
-                            annotation.Put(PdfName.FS, fs.Reference);
+                                //fs.AddDescription(fileName, false);
 
-                            //PdfTemplate tmp = PdfTemplate.CreateTemplate(pdfWriter, document.PageSize.Width, 100);
-                            PdfAppearance ap = pdfWriter.DirectContent.CreateAppearance(rect.Width, rect.Height);
-                            annotation.SetAppearance(PdfAnnotation.APPEARANCE_NORMAL, ap);                          
+                                //var rect = new Rectangle(10000f,10000f);
+                                Rectangle rect = new Rectangle(100, 400, 500, 800);
+                                rect.Border = Rectangle.BOX;
+                                rect.BorderWidth = 0.5f;
+                                rect.BorderColor = new BaseColor(0xFF, 0x00, 0x00);
 
-                            Chunk linkChunk = new Chunk(fileName);
-                            linkChunk.SetAnnotation(annotation);
-                            Phrase phrase = new Phrase();
-                            phrase.Add(linkChunk);
-                            document.Add(phrase);
-                            
+                                PdfAnnotation annotation = new PdfAnnotation(pdfWriter, rect);
+                                annotation.Put(PdfName.NAME, PdfName.ANNOT);
+                                annotation.Put(PdfName.SUBTYPE, PdfName.FILEATTACHMENT);
+                                annotation.Put(PdfName.CONTENTS, new PdfString(fileName));
+                                annotation.Put(PdfName.FS, fs.Reference);
 
+                                //PdfTemplate tmp = PdfTemplate.CreateTemplate(pdfWriter, document.PageSize.Width, 100);
+                                PdfAppearance ap = pdfWriter.DirectContent.CreateAppearance(rect.Width, rect.Height);
+                                annotation.SetAppearance(PdfAnnotation.APPEARANCE_NORMAL, ap);
 
-                            document.Close();
-                            pdfWriter.Close();
-                            pdfWriter.Dispose();
+                                Chunk linkChunk = new Chunk("(" + (i+1).ToString() + ") " + fileName, listFont);
+                                linkChunk.SetAnnotation(annotation);
+                                Phrase phrase = new Phrase();
+                                phrase.Add(new Chunk("\n"));
+                                phrase.Add(linkChunk);
+                                //document.Add(phrase);
+                                //document.Add(new Chunk("\n"));
 
+                                //document.Close();
+                                //pdfWriter.Close();
+                                //pdfWriter.Dispose();
+                                pMain.Add(phrase);
+                            }
+                            pMain.IndentationLeft = 10f;
+                            document.Add(pMain);
+                            //pdf.Close();
+                            //pdf.Dispose();
                         }
-                        pdf.Close();
-                        pdf.Dispose();
+                        //document.Dispose();
                     }
-                    document.Dispose();
                 }
             }
             catch (Exception ex)
@@ -77,10 +151,8 @@ namespace PDFWithEmbadedFile_POC
             }
 
             PasswordProtectPDF(strPDFPath, password);
-        }     
-        
-        
-        
+        }
+
         public void CreatePDFFile_old(string strPDFPath, string attachment, string password)
         {
             try

@@ -39,6 +39,7 @@
             this.btnProcess = new System.Windows.Forms.Button();
             this.txtpassword = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.lstSelectedFiles = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // opfDialog
@@ -57,14 +58,15 @@
             // txtFilePath
             // 
             this.txtFilePath.Enabled = false;
-            this.txtFilePath.Location = new System.Drawing.Point(84, 45);
+            this.txtFilePath.Location = new System.Drawing.Point(68, 12);
             this.txtFilePath.Name = "txtFilePath";
-            this.txtFilePath.Size = new System.Drawing.Size(267, 20);
+            this.txtFilePath.Size = new System.Drawing.Size(56, 20);
             this.txtFilePath.TabIndex = 1;
+            this.txtFilePath.Visible = false;
             // 
             // btnFileSelect
             // 
-            this.btnFileSelect.Location = new System.Drawing.Point(357, 43);
+            this.btnFileSelect.Location = new System.Drawing.Point(84, 43);
             this.btnFileSelect.Name = "btnFileSelect";
             this.btnFileSelect.Size = new System.Drawing.Size(75, 23);
             this.btnFileSelect.TabIndex = 2;
@@ -126,11 +128,20 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "Password";
             // 
+            // lstSelectedFiles
+            // 
+            this.lstSelectedFiles.FormattingEnabled = true;
+            this.lstSelectedFiles.Location = new System.Drawing.Point(166, 43);
+            this.lstSelectedFiles.Name = "lstSelectedFiles";
+            this.lstSelectedFiles.Size = new System.Drawing.Size(266, 43);
+            this.lstSelectedFiles.TabIndex = 9;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(453, 246);
+            this.Controls.Add(this.lstSelectedFiles);
             this.Controls.Add(this.txtpassword);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnProcess);
@@ -160,5 +171,6 @@
         private System.Windows.Forms.Button btnProcess;
         private System.Windows.Forms.TextBox txtpassword;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ListBox lstSelectedFiles;
     }
 }

@@ -44,10 +44,12 @@ namespace PDFWithEmbadedFile_POC
             }
         }
 
+        public string[] SelectedFiles { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
-            opfDialog.Multiselect = false;
+            opfDialog.Multiselect = true;//false;
             opfDialog.Filter = Filter;
             sfDialog.Filter = SaveFileExt;
         }
@@ -57,7 +59,9 @@ namespace PDFWithEmbadedFile_POC
             var result = opfDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                txtFilePath.Text = opfDialog.FileName;
+                //txtFilePath.Text = opfDialog.FileName;
+                SelectedFiles = opfDialog.FileNames;
+                lstSelectedFiles.DataSource = SelectedFiles;
                 return;
             }
             MessageBox.Show("Please select a file to procees");
@@ -80,7 +84,8 @@ namespace PDFWithEmbadedFile_POC
             string password = txtpassword.Text;
             if (string.IsNullOrWhiteSpace(password))
                 password = "1";
-            core.CreatePDFFile(txtOutputFile.Text, txtFilePath.Text,txtpassword.Text);
+            //core.CreatePDFFile(txtOutputFile.Text, txtFilePath.Text, txtpassword.Text);
+            core.CreatePDFFile(txtOutputFile.Text, SelectedFiles, txtpassword.Text);
             OpenFolder(txtOutputFile.Text);
         }
 
