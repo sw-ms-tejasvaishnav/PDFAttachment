@@ -80,7 +80,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="samplepdf\attachfile.pdf" />
+    <None Include="samplepdf\pdfContainersample.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DLL\itextsharp.dll" />
